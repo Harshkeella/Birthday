@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mom's 50th Birthday Celebration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Background particles */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: gold;
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Open button */
+        .open-button {
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(45deg, #d4af37, #ffd700, #d4af37);
+            border: 3px solid #ffd700;
+            border-radius: 15px;
+            padding: 25px 60px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: glow 2s infinite alternate;
+        }
+
+        .open-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 10px 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Floating sparkles around button */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            border-radius: 50%;
+            animation: sparkle 3s infinite ease-in-out;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(0.5) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+        }
+
+        /* Ribbon curls */
+        .ribbon {
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(45deg, #ffd700, #c9c9c9);
+            border-radius: 10px;
+            animation: curl 4s infinite ease-in-out;
+            opacity: 0.8;
+        }
+
+        @keyframes curl {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.1); }
+        }
+
+        /* Animation elements */
+        .balloon {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            z-index: 5;
+        }
+
+        .balloon.gold {
+            background: linear-gradient(45deg, #d4af37, #ffd700);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        .balloon.white {
+            background: linear-gradient(45deg, #ffffff, #f0f0f0);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .rose {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            opacity: 0;
+            z-index: 5;
+        }
+
+        .rose::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 5px;
+            left: 5px;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: gold;
+            opacity: 0;
+            z-index: 5;
+        }
+
+        /* Invitation card */
+        .invitation-card {
+            position: absolute;
+            width: 500px;
+            height: 650px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 3px solid #d4af37;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+            z-index: 15;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            transition: all 1s ease;
+        }
+
+        .invitation-card.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: cardGlow 3s infinite alternate;
+        }
+
+        @keyframes cardGlow {
+            0% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8); }
+            100% { box-shadow: 0 20px 60px rgba(255, 215, 0, 0.3); }
+        }
+
+        .card-border {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            background: linear-gradient(45deg, 
+                transparent 0%, 
+                rgba(212, 175, 55, 0.1) 50%, 
+                transparent 100%);
+        }
+
+        .card-title {
+            font-size: 36px;
+            color: #d4af37;
+            margin-bottom: 25px;
+            font-family: 'Brush Script MT', cursive;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .card-message {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 25px;
+            font-style: italic;
+            line-height: 1.6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .card-invitation-text {
+            font-size: 16px;
+            color: #e6e6e6;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            text-align: center;
+            font-style: italic;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-details-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+        }
+
+        .card-details {
+            color: #d4af37;
+            font-size: 16px;
+            line-height: 1.8;
+            text-align: left;
+            flex: 1;
+        }
+
+        .card-details .detail-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .card-details .emoji {
+            font-size: 18px;
+            margin-right: 10px;
+            width: 25px;
+        }
+
+        .card-details .label {
+            color: #ffd700;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .card-details .value {
+            color: #ffffff;
+        }
+
+        .card-venue {
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.4;
+            margin-top: 5px;
+            margin-left: 0px;
+            font-style: italic;
+        }
+
+        .thank-you {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+            font-style: italic;
+            text-align: right;
+            margin-left: 70px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 215, 0, 0.6);
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Animate elements */
+        .animate-balloon {
+            animation: balloonFloat 2s ease-out forwards;
+        }
+
+        .animate-rose {
+            animation: roseFloat 2s ease-out forwards;
+        }
+
+        .animate-confetti {
+            animation: confettiFloat 2s ease-out forwards;
+        }
+
+        @keyframes balloonFloat {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
+        }
+
+        @keyframes roseFloat {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(360deg); }
+        }
+
+        @keyframes confettiFloat {
+            0% { opacity: 1; transform: translate(0, 0) rotate(0deg); }
+            100% { opacity: 0; transform: translate(var(--dx), var(--dy)) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Background particles -->
+        <div class="particles" id="particles"></div>
+
+        <!-- Open button with decorations -->
+        <div id="openButton" class="open-button">
+            OPEN
+            <!-- Floating sparkles -->
+            <div class="sparkle" style="top: -20px; left: -20px; animation-delay: 0s;"></div>
+            <div class="sparkle" style="top: -30px; right: -15px; animation-delay: 0.5s;"></div>
+            <div class="sparkle" style="bottom: -25px; left: -10px; animation-delay: 1s;"></div>
+            <div class="sparkle" style="bottom: -20px; right: -25px; animation-delay: 1.5s;"></div>
+            
+            <!-- Ribbon curls -->
+            <div class="ribbon" style="top: -40px; left: -50px; animation-delay: 0s;"></div>
+            <div class="ribbon" style="top: -40px; right: -50px; animation-delay: 1s;"></div>
+            <div class="ribbon" style="bottom: -40px; left: -50px; animation-delay: 2s;"></div>
+            <div class="ribbon" style="bottom: -40px; right: -50px; animation-delay: 3s;"></div>
+        </div>
+
+        <!-- Invitation card -->
+        <div class="invitation-card hidden" id="invitationCard">
+            <div class="card-border"></div>
+            <div class="card-title">Mom's 50th Birthday Celebration</div>
+            <div class="card-message">Join us to celebrate a golden milestone!</div>
+            <div class="card-invitation-text">
+                Let's gather and have some quality time with mom to make her day memorable.<br>
+                Your presence will add sparkle to this special celebration as we honor<br>
+                five decades of love, laughter, and beautiful memories.
+            </div>
+            <div class="card-details-container">
+                <div class="card-details">
+                    <div class="detail-item">
+                        <span class="emoji">📅</span>
+                        <span class="label">Date:</span>
+                        <span class="value">16th July 2025</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="emoji">🕰️</span>
+                        <span class="label">Time:</span>
+                        <span class="value">7:00 PM</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="emoji">📍</span>
+                        <span class="label">Venue:</span>
+                        <span class="value">Mahesh Lunch Home, Palm Beach Road, Sec-15, Kharghar</span>
+                    </div>
+                </div>
+                <div class="thank-you">
+                    Thank you ✨
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create background particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Create animation elements
+        function createAnimationElements() {
+            const container = document.querySelector('.container');
+            
+            // Create balloons
+            for (let i = 0; i < 12; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = `balloon ${i % 2 === 0 ? 'gold' : 'white'}`;
+                balloon.style.left = '50%';
+                balloon.style.top = '50%';
+                container.appendChild(balloon);
+            }
+
+            // Create roses
+            for (let i = 0; i < 8; i++) {
+                const rose = document.createElement('div');
+                rose.className = 'rose';
+                rose.style.left = '50%';
+                rose.style.top = '50%';
+                container.appendChild(rose);
+            }
+
+            // Create confetti
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = '50%';
+                confetti.style.top = '50%';
+                container.appendChild(confetti);
+            }
+        }
+
+        // Animate elements outward
+        function animateElements() {
+            const balloons = document.querySelectorAll('.balloon');
+            const roses = document.querySelectorAll('.rose');
+            const confetti = document.querySelectorAll('.confetti');
+
+            // Animate balloons
+            balloons.forEach((balloon, index) => {
+                const angle = (index / balloons.length) * 2 * Math.PI;
+                const distance = 800;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                balloon.style.setProperty('--dx', dx + 'px');
+                balloon.style.setProperty('--dy', dy + 'px');
+                balloon.classList.add('animate-balloon');
+            });
+
+            // Animate roses
+            roses.forEach((rose, index) => {
+                const angle = (index / roses.length) * 2 * Math.PI;
+                const distance = 600;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                rose.style.setProperty('--dx', dx + 'px');
+                rose.style.setProperty('--dy', dy + 'px');
+                rose.classList.add('animate-rose');
+            });
+
+            // Animate confetti
+            confetti.forEach((confetti, index) => {
+                const angle = Math.random() * 2 * Math.PI;
+                const distance = 400 + Math.random() * 400;
+                const dx = Math.cos(angle) * distance;
+                const dy = Math.sin(angle) * distance;
+                
+                confetti.style.setProperty('--dx', dx + 'px');
+                confetti.style.setProperty('--dy', dy + 'px');
+                confetti.classList.add('animate-confetti');
+            });
+        }
+
+        // Show invitation card
+        function showInvitation() {
+            const card = document.getElementById('invitationCard');
+            card.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.add('show');
+            }, 100);
+        }
+
+        // Main animation sequence
+        function startAnimation() {
+            const button = document.getElementById('openButton');
+            
+            // Hide button
+            button.style.opacity = '0';
+            button.style.transform = 'scale(0.8)';
+            
+            // Start animations
+            setTimeout(() => {
+                animateElements();
+            }, 300);
+            
+            // Show invitation card
+            setTimeout(() => {
+                showInvitation();
+            }, 1500);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            createAnimationElements();
+            
+            // Add click event to open button
+            document.getElementById('openButton').addEventListener('click', startAnimation);
+        });
+    </script>
+</body>
+</html>
